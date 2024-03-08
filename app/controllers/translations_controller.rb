@@ -1,6 +1,6 @@
 class TranslationsController < ApplicationController
   def translate
-    cache_key = "translations-#{ translation_params[:text] }"
+    cache_key = "translations-#{ translation_params[:text] }-#{translation_params[:to]}"
 
     translation = Rails.cache.fetch(cache_key) do
       DeepLClient.translate text: translation_params[:text],
