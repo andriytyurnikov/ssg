@@ -12,4 +12,11 @@ class TranslationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @response.body, {translation: 'Привіт, світе.'}.to_json
   end
 
+  test "should pass parameters translate to Polish" do
+    post translate_url(text: 'Hello, world', to: 'PL')
+
+    assert_response :success
+    assert_equal @response.body, {translation: 'Witaj, świecie'}.to_json
+  end
+
 end
