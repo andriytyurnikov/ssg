@@ -1,10 +1,17 @@
 class TranslationsController < ApplicationController
   def translate
-    response = DeepLClient.translate  text: params[:text],
-                                      target_lang: params[:to]
+    cache_key = "translations-#{ translation_params[:text] }"
 
-    puts response.body
-    puts params[:text].inspect
-    render json: {translation: response.body}
+    translation = Rails.cache.fetch(cache_key) do
+      DeepLClient.translate text: translation_params[:text],
+                            target_lang: translation_params[:to]
+    end
+
+    render json: {translation: translation }
+  end
+
+  private
+  def translation_params
+    params.permit(:text, :to)
   end
 end
